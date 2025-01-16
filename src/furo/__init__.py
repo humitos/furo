@@ -375,6 +375,19 @@ def _overwrite_pygments_css(
         f.write(get_pygments_stylesheet())
 
 
+def extend_html_context(app, pagename, templatename, context, doctree):
+     # Add ``sphinx_version_info`` tuple for use in Jinja templates
+     context['sphinx_version_info'] = sphinx_version
+
+     # Inject all the Read the Docs environment variables in the context:
+     # https://docs.readthedocs.io/en/stable/reference/environment-variables.html
+     context['READTHEDOCS'] = os.environ.get("READTHEDOCS", False) == "True"
+     if context['READTHEDOCS']:
+         for key, value in os.environ.items():
+             if key.startswith("READTHEDOCS_"):
+                 context[key] = value
+
+
 def setup(app: sphinx.application.Sphinx) -> Dict[str, Any]:
     """Entry point for sphinx theming."""
     app.require_sphinx("6.0")
@@ -390,6 +403,8 @@ def setup(app: sphinx.application.Sphinx) -> Dict[str, Any]:
     app.connect("html-page-context", _html_page_context)
     app.connect("builder-inited", _builder_inited)
     app.connect("build-finished", _overwrite_pygments_css)
+    # Extend the default context when rendering the templates.
+    app.connect("html-page-context", extend_html_context)
 
     return {
         "parallel_read_safe": True,
