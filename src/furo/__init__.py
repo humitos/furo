@@ -377,7 +377,7 @@ def _overwrite_pygments_css(
 
 def extend_html_context(app, pagename, templatename, context, doctree):
      # Add ``sphinx_version_info`` tuple for use in Jinja templates
-     context['sphinx_version_info'] = sphinx_version
+     context['sphinx_version_info'] = sphinx.version_info
 
      # Inject all the Read the Docs environment variables in the context:
      # https://docs.readthedocs.io/en/stable/reference/environment-variables.html
