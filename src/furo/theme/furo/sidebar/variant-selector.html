@@ -1,1 +1,6 @@
 {# Add variant selector for Read the Docs embedding #}
+{% if READTHEDOCS %}
+<div class="readthedocs-flyout-container">
+    <readthedocs-flyout position="up inline"></readthedocs-flyout>
+</div>
+{% endif %}
